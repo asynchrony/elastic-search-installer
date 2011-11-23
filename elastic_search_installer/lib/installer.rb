@@ -37,11 +37,15 @@ class Installer
   def call
     create_temp_dir
     unpack_tar
-
+    move_elastic_search_to_install_dir
     remove_temp_dir
   end
 
   private
+
+  def move_elastic_search_to_install_dir
+    Kernel.system("mv #{tmp_path}/#{elastic_search_name} #{elastic_install_path}/")
+  end
 
   def remove_temp_dir
     Kernel.system("rm -R #{tmp_path}")
@@ -56,7 +60,7 @@ class Installer
   end
 
   def elastic_install_dir
-    File.expand_path(File.join('~', 'elasticsearch-0.18.4'))
+    File.expand_path(File.join('~', elastic_search_name))
   end
 
   def elastic_search_installed?
@@ -71,8 +75,16 @@ class Installer
     File.expand_path(File.join(__FILE__, '..', '..', '..'))
   end
 
+  def elastic_install_path
+    File.expand_path('~')
+  end
+
+  def elastic_search_name
+    'elasticsearch-0.18.4'
+  end
+
   def elastic_search_tar_path()
-    File.join(root_path, 'lib', 'elasticsearch-0.18.4.tar.gz')
+    File.join(root_path, 'lib', "#{elastic_search_name}.tar.gz")
   end
 
   def tmp_path()
