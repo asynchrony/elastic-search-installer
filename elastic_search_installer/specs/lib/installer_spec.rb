@@ -43,7 +43,10 @@ describe Installer do
 
       it 'moves elastic search into the home directory'
 
-      it 'removes the tmp directory'
+      it 'removes the tmp directory' do
+        Kernel.should_receive(:system).with("rm -R #{tmp_path}")
+        subject.call
+      end
     end
   end
 

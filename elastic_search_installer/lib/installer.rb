@@ -37,9 +37,15 @@ class Installer
   def call
     create_temp_dir
     unpack_tar
+
+    remove_temp_dir
   end
 
   private
+
+  def remove_temp_dir
+    Kernel.system("rm -R #{tmp_path}")
+  end
 
   def create_temp_dir
     FileUtils.mkdir_p tmp_path unless File.directory?(tmp_path)
