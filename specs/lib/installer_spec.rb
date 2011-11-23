@@ -103,9 +103,22 @@ describe Installer do
     end
 
     describe "installing with the --force switch" do
+      before do
+        Kernel.stub(:system)
+        FileUtils.stub(:mkdir_p => nil, :mv => nil, :rm_r => nil)
+        File.stub(:directory?).with(tmp_path).and_return(false)
+      end
+
       subject { Installer.new({:f => true, :force => true}) }
-      
-      it 'removes the current installation'
+
+      it 'removes the current installation' do
+        FileUtils.should_receive(:rm_r).with(elastic_install_dir)
+        subject.call
+      end
+
+      it 'is valid' do
+        subject.should be_valid
+      end
 
       it_behaves_like 'a successful installation'
     end

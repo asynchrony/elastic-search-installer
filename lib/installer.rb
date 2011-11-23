@@ -1,17 +1,21 @@
 class Installer
-  attr_accessor :error_messages
+  attr_accessor :error_messages, :options
 
   def initialize(options)
     self.error_messages = []
+    self.options = options
   end
 
   def valid?
     error_messages << "Java is not installed. You must have java installed to install Elastic Search." unless java_installed?
-    error_messages << "Elastic search seems to already be installed at #{elastic_install_dir}, please run the uninstall command before continuing." if elastic_search_installed?
+    unless force_install? || !elastic_search_installed?
+      error_messages << "Elastic search seems to already be installed at #{elastic_install_dir}, please run the uninstall command before continuing."
+    end
     error_messages.empty?
   end
 
   def call
+    remove_current_install if force_install?
     create_temp_dir
     unpack_tar
     move_elastic_search_to_install_dir
@@ -24,8 +28,16 @@ class Installer
 
   private
 
+  def remove_current_install
+    FileUtils.rm_r(elastic_install_dir)
+  end
+
   def move_elastic_search_to_install_dir
     FileUtils.mv("#{tmp_path}/#{elastic_search_name}", elastic_install_path)
+  end
+
+  def force_install?
+    options[:force]
   end
 
   def remove_temp_dir

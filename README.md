@@ -7,10 +7,11 @@ Install elastic search
 
 ``$ elastic_search_installer install``
 
-Uninstall elastic search
+Force install elastic search (first remove installation directory)
 
-``$ elastic_search_installer uninstall``
+``$ elastic_search_installer install --force``
 
 Help
 
 ``$ elastic_search_installer help``
+``$ elastic_search_installer help install``
