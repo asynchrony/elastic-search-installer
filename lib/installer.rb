@@ -18,6 +18,10 @@ class Installer
     remove_temp_dir
   end
 
+  def elastic_install_dir
+    File.expand_path(File.join('~', elastic_search_name))
+  end
+
   private
 
   def move_elastic_search_to_install_dir
@@ -34,10 +38,6 @@ class Installer
 
   def unpack_tar
     Kernel.system("cd #{tmp_path}; tar xzf #{elastic_search_tar_path}")
-  end
-
-  def elastic_install_dir
-    File.expand_path(File.join('~', elastic_search_name))
   end
 
   def elastic_search_installed?

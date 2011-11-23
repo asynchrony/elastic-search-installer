@@ -43,6 +43,13 @@ command :install do |c|
     installer = Installer.new
     if installer.valid?
       installer.call
+      puts %Q(
+****************************
+      I kan haz surch!
+****************************
+
+Elastic Search has been installed at #{installer.elastic_install_dir}
+)
     else
       puts installer.error_messages
     end
