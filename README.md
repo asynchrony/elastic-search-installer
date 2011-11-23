@@ -24,3 +24,8 @@ Push up script and install on server
 ====================================
 
 `scp -r elastic-search-installer user@host:.; ssh user@host 'elastic-search-installer/bin/elastic_search_installer install; rm -R elastic-search-installer'`
+
+TODO
+====
+
+* Make elastic search start on system boot
