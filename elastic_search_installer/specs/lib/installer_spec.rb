@@ -8,6 +8,45 @@ describe Installer do
     File.stub(:exists?).with(elastic_install_dir).and_return false
   end
 
+  context "when valid" do
+    let(:root_path) { File.expand_path(File.join(__FILE__, '..', '..', '..', '..')) }
+    let(:elastic_search_tar_path) { File.join(root_path, 'lib', 'elasticsearch-0.18.4.tar.gz') }
+    let(:tmp_path) { File.join(root_path, 'tmp') }
+
+    describe "executing the install" do
+      before do
+        Kernel.stub(:system)
+        FileUtils.stub(:mkdir_p)
+        File.stub(:directory?).with(tmp_path).and_return(false)
+      end
+
+      context "when the tmp directory does exist" do
+        before do
+          File.stub(:directory?).with(tmp_path).and_return(true)
+        end
+
+        it 'does not create the tmp directory' do
+          FileUtils.should_not_receive(:mkdir_p).with(tmp_path)
+          subject.call
+        end
+      end
+
+      it 'creates the tmp directory' do
+        FileUtils.should_receive(:mkdir_p).with(tmp_path)
+        subject.call
+      end
+
+      it 'unpacks the elastic archive into the tmp directory' do
+        Kernel.should_receive(:system).with("cd #{tmp_path}; tar xzf #{elastic_search_tar_path}")
+        subject.call
+      end
+
+      it 'moves elastic search into the home directory'
+
+      it 'removes the tmp directory'
+    end
+  end
+
   context "when java is not installed" do
     before do
       Kernel.stub(:system).with("java -version").and_return false

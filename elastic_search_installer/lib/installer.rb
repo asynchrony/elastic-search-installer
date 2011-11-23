@@ -35,10 +35,19 @@ class Installer
   end
 
   def call
-
+    create_temp_dir
+    unpack_tar
   end
 
   private
+
+  def create_temp_dir
+    FileUtils.mkdir_p tmp_path unless File.directory?(tmp_path)
+  end
+
+  def unpack_tar
+    Kernel.system("cd #{tmp_path}; tar xzf #{elastic_search_tar_path}")
+  end
 
   def elastic_install_dir
     File.expand_path(File.join('~', 'elasticsearch-0.18.4'))
@@ -50,5 +59,17 @@ class Installer
 
   def java_installed?
     Kernel.system('java -version')
+  end
+
+  def root_path
+    File.expand_path(File.join(__FILE__, '..', '..', '..'))
+  end
+
+  def elastic_search_tar_path()
+    File.join(root_path, 'lib', 'elasticsearch-0.18.4.tar.gz')
+  end
+
+  def tmp_path()
+    File.join(root_path, 'tmp')
   end
 end
