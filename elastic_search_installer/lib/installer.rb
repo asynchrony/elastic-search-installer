@@ -26,19 +26,29 @@ class Installer
     #`rm -R #{tmp_path}`
 
   def valid?
-    @full_error_messages = "Java is not installed. You must have java installed to install Elastic Search." unless java_installed?
-    @full_error_messages.nil?
+    @error_messages = []
+    @error_messages << "Java is not installed. You must have java installed to install Elastic Search." unless java_installed?
+    @error_messages << "Elastic search seems to already be installed at #{elastic_install_dir}, please run the uninstall command before continuing." if elastic_search_installed?
+    @error_messages.empty?
   end
 
   def call
 
   end
 
-  def full_error_messages
-    @full_error_messages
+  def error_messages
+    @error_messages
   end
 
   private
+
+  def elastic_install_dir
+    File.expand_path(File.join('~', 'elasticsearch-0.18.4'))
+  end
+
+  def elastic_search_installed?
+    File.exists?(elastic_install_dir)
+  end
 
   def java_installed?
     Kernel.system('java -version')
