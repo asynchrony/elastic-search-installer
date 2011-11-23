@@ -3,7 +3,7 @@ require_relative('../../lib/installer')
 describe Installer do
   let(:elastic_search_name) { 'elasticsearch-0.18.4' }
   let(:elastic_install_dir) { File.expand_path(File.join('~', elastic_search_name)) }
-  let(:elastic_install_path) { "#{File.expand_path('~')}/" }
+  let(:elastic_install_path) { File.expand_path('~') }
 
   before do
     Kernel.stub(:system).with("java -version").and_return true
@@ -16,10 +16,9 @@ describe Installer do
     let(:tmp_path) { File.join(root_path, 'tmp') }
 
     describe "executing the install" do
-
       before do
         Kernel.stub(:system)
-        FileUtils.stub(:mkdir_p)
+        FileUtils.stub(:mkdir_p => nil, :mv => nil, :rm_r => nil)
         File.stub(:directory?).with(tmp_path).and_return(false)
       end
 
@@ -45,12 +44,12 @@ describe Installer do
       end
 
       it 'moves elastic search into the home directory' do
-        Kernel.should_receive(:system).with("mv #{tmp_path}/#{elastic_search_name} #{elastic_install_path}")
+        FileUtils.should_receive(:mv).with("#{tmp_path}/#{elastic_search_name}", elastic_install_path)
         subject.call
       end
 
       it 'removes the tmp directory' do
-        Kernel.should_receive(:system).with("rm -R #{tmp_path}")
+        FileUtils.should_receive(:rm_r).with(tmp_path)
         subject.call
       end
     end
