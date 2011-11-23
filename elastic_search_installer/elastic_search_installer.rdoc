@@ -1,0 +1,5 @@
+= elastic_search_installer
+
+Generate this with
+    elastic_search_installer rdoc
+After you have described your command line interface

@@ -1,0 +1,6 @@
+= elastic_search_installer
+
+Describe your project here
+
+:include:elastic_search_installer.rdoc
+
