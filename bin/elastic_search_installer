@@ -11,6 +11,11 @@ unless File.respond_to? :realpath
   end
 end
 $: << File.expand_path(File.dirname(File.realpath(__FILE__)) + '/../lib')
+
+# Use the packaged gli gem stored in vendor/gems so that we do not have to
+# depend on having rubygems or bundler installed
+$LOAD_PATH.unshift File.expand_path(File.join(File.dirname(__FILE__), '..', 'vendor', 'gems', 'gli-1.3.7', 'lib'))
+
 require 'rubygems'
 require 'gli'
 require 'elastic_search_installer_version'
