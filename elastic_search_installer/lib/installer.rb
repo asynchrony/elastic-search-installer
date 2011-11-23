@@ -1,12 +1,6 @@
 class Installer
     # Your command logic here
 
-    #check if Java is installed
-    #puts 'Checking for java installation'
-    #unless system('java -version')
-    #  raise 'You must have java installed'
-    #end
-    #puts 'Java is installed'
     #
     ## untar and unzip elastic search into tmp/
     #puts 'Unpacking elastic search into tmp'
@@ -33,6 +27,7 @@ class Installer
 
   def valid?
     @full_error_messages = "Java is not installed. You must have java installed to install Elastic Search." unless java_installed?
+    @full_error_messages.nil?
   end
 
   def call
