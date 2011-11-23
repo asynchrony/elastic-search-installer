@@ -11,8 +11,8 @@ describe Installer do
   end
 
   context "when valid" do
-    let(:root_path) { File.expand_path(File.join(__FILE__, '..', '..', '..', '..')) }
-    let(:elastic_search_tar_path) { File.join(root_path, 'lib', "#{elastic_search_name}.tar.gz") }
+    let(:root_path) { File.expand_path(File.join(__FILE__, '..', '..', '..')) }
+    let(:elastic_search_tar_path) { File.join(root_path, 'vendor', "#{elastic_search_name}.tar.gz") }
     let(:tmp_path) { File.join(root_path, 'tmp') }
 
     describe "executing the install" do

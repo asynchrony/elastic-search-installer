@@ -14,6 +14,7 @@ $: << File.expand_path(File.dirname(File.realpath(__FILE__)) + '/../lib')
 require 'rubygems'
 require 'gli'
 require 'elastic_search_installer_version'
+require 'installer'
 
 include GLI
 
@@ -43,7 +44,7 @@ command :install do |c|
     if installer.valid?
       installer.call
     else
-      puts installer.error_messages.inspect
+      puts installer.error_messages
     end
   end
 end

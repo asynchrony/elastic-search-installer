@@ -1,6 +1,6 @@
 = elastic_search_installer
 
-Describe your project here
+Installs Elastic Search as a service
 
 :include:elastic_search_installer.rdoc
 
