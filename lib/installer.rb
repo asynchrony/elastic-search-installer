@@ -15,7 +15,7 @@ class Installer
   end
 
   def call
-    remove_current_install if force_install?
+    remove_current_install if force_install? && elastic_search_installed?
     create_temp_dir
     unpack_tar
     move_elastic_search_to_install_dir

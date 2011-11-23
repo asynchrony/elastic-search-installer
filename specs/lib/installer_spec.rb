@@ -1,12 +1,6 @@
 require_relative('../../lib/installer')
 
 shared_examples_for 'a successful installation' do
-  before do
-    Kernel.stub(:system)
-    FileUtils.stub(:mkdir_p => nil, :mv => nil, :rm_r => nil)
-    File.stub(:directory?).with(tmp_path).and_return(false)
-  end
-
   context "when the tmp directory does exist" do
     before do
       File.stub(:directory?).with(tmp_path).and_return(true)
@@ -52,6 +46,9 @@ describe Installer do
   before do
     subject.stub(:`).with("which java").and_return('/usr/bin/java')
     File.stub(:exists?).with(elastic_install_dir).and_return false
+    Kernel.stub(:system)
+    FileUtils.stub(:mkdir_p => nil, :mv => nil, :rm_r => nil)
+    File.stub(:directory?).with(tmp_path).and_return(false)
   end
 
   context "when valid" do
@@ -103,12 +100,6 @@ describe Installer do
     end
 
     describe "installing with the --force switch" do
-      before do
-        Kernel.stub(:system)
-        FileUtils.stub(:mkdir_p => nil, :mv => nil, :rm_r => nil)
-        File.stub(:directory?).with(tmp_path).and_return(false)
-      end
-
       subject { Installer.new({:f => true, :force => true}) }
 
       it 'removes the current installation' do
@@ -136,6 +127,17 @@ describe Installer do
 
     it 'is valid' do
       subject.should be_valid
+    end
+
+    context 'and force is supplied' do
+      subject { Installer.new({:f => true, :force => true}) }
+
+      it 'does not remove the current installation' do
+        FileUtils.should_not_receive(:rm_r).with(elastic_install_dir)
+        subject.call
+      end
+
+      it_behaves_like 'a successful installation'
     end
   end
 
