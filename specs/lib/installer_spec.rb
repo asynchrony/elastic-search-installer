@@ -6,7 +6,7 @@ describe Installer do
   let(:elastic_install_path) { File.expand_path('~') }
 
   before do
-    Kernel.stub(:system).with("java -version").and_return true
+    subject.stub(:`).with("which java").and_return('/usr/bin/java')
     File.stub(:exists?).with(elastic_install_dir).and_return false
   end
 
@@ -57,7 +57,7 @@ describe Installer do
 
   context "when java is not installed" do
     before do
-      Kernel.stub(:system).with("java -version").and_return false
+      subject.stub(:`).with("which java").and_return('      ')
     end
 
     it 'adds an error message' do
@@ -72,7 +72,7 @@ describe Installer do
 
   context "when java is installed" do
     before do
-      Kernel.stub(:system).with("java -version").and_return true
+      subject.stub(:`).with("which java").and_return('/usr/bin/java')
     end
 
     it 'does not add an error message' do
@@ -117,7 +117,7 @@ describe Installer do
 
   context "when java is not installed and elastic search is already installed" do
     before do
-      Kernel.stub(:system).with("java -version").and_return false
+      subject.stub(:`).with("which java").and_return('     ')
       File.stub(:exists?).with(elastic_install_dir).and_return true
     end
 

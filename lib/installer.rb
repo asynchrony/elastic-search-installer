@@ -45,7 +45,7 @@ class Installer
   end
 
   def java_installed?
-    Kernel.system('java -version')
+    !(`which java`).strip.empty?
   end
 
   def root_path
