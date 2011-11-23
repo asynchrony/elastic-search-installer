@@ -13,11 +13,7 @@ spec = Gem::Specification.new do |s|
 bin/elastic_search_installer
   )
   s.require_paths << 'lib'
-  s.has_rdoc = true
-  s.extra_rdoc_files = ['README.rdoc','elastic_search_installer.rdoc']
-  s.rdoc_options << '--title' << 'elastic_search_installer' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
   s.executables << 'elastic_search_installer'
   s.add_development_dependency('rake')
-  s.add_development_dependency('rdoc')
 end

@@ -1,6 +1,0 @@
-= elastic_search_installer
-
-Installs Elastic Search as a service
-
-:include:elastic_search_installer.rdoc
-
