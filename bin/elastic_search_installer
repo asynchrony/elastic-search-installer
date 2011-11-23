@@ -18,29 +18,17 @@ require 'installer'
 
 include GLI
 
-program_desc 'Describe your application here'
+program_desc 'Install Elastic Search as a service'
 
 version ElasticSearchInstaller::VERSION
 
-desc 'Describe some switch here'
-switch [:s,:switch]
-
-desc 'Describe some flag here'
-default_value 'the default'
-arg_name 'The name of the argument'
-flag [:f,:flagname]
-
 desc 'Installs Elastic Search'
-arg_name 'Describe arguments to install here'
 command :install do |c|
-  c.desc 'Describe a switch to install'
-  c.switch :s
+  c.desc 'Force install, blow away any current installation before install'
+  c.switch [:f, :force]
 
-  c.desc 'Describe a flag to install'
-  c.default_value 'default'
-  c.flag :f
   c.action do |global_options,options,args|
-    installer = Installer.new
+    installer = Installer.new(options)
     if installer.valid?
       installer.call
       puts %Q(
@@ -53,13 +41,6 @@ Elastic Search has been installed at #{installer.elastic_install_dir}
     else
       puts installer.error_messages
     end
-  end
-end
-
-desc 'Describe uninstall here'
-arg_name 'Describe arguments to uninstall here'
-command :uninstall do |c|
-  c.action do |global_options,options,args|
   end
 end
 

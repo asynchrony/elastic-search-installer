@@ -1,7 +1,7 @@
 class Installer
   attr_accessor :error_messages
 
-  def initialize
+  def initialize(options)
     self.error_messages = []
   end
 
