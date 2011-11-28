@@ -37,7 +37,7 @@ class Installer
   def valid?
     error_messages << "Java is not installed. You must have java installed to install Elastic Search." unless Installer.java_installed?
     unless force_install? || !Uninstaller.elastic_search_installed?
-      error_messages << "Elastic search seems to already be installed at #{Installer.elastic_install_dir}, please run the uninstall command before continuing."
+      error_messages << "Elastic search seems to already be installed at #{Installer.elastic_install_dir}, please run with --force."
     end
     error_messages.empty?
   end

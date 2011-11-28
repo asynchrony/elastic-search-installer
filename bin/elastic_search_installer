@@ -19,6 +19,7 @@ $LOAD_PATH.unshift File.expand_path(File.join(File.dirname(__FILE__), '..', 'ven
 require 'gli'
 require 'elastic_search_installer_version'
 require 'installer'
+require 'uninstaller'
 
 include GLI
 
@@ -40,7 +41,7 @@ command :install do |c|
       I kan haz surch!
 ****************************
 
-Elastic Search has been installed at #{installer.elastic_install_dir}
+Elastic Search has been installed at #{Installer.elastic_install_dir}
 )
     else
       puts installer.error_messages
