@@ -20,6 +20,7 @@ require 'gli'
 require 'elastic_search_installer_version'
 require 'installer'
 require 'uninstaller'
+require 'installation_smoke_test'
 
 include GLI
 
@@ -36,13 +37,25 @@ command :install do |c|
     installer = Installer.new(options)
     if installer.valid?
       installer.call
-      puts %Q(
+
+      if InstallationSmokeTest.call
+        puts %Q(
 ****************************
       I kan haz surch!
 ****************************
 
 Elastic Search has been installed at #{Installer.elastic_install_dir}
 )
+      else
+        puts %Q(
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    Installation Failed
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+The smoke test for this installation failed.
+The failed install remains at #{Installer.elastic_install_dir}
+)
+      end
     else
       puts installer.error_messages
     end
