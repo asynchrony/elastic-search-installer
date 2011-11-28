@@ -28,6 +28,25 @@ program_desc 'Install Elastic Search as a service'
 
 version ElasticSearchInstaller::VERSION
 
+desc 'Removes Elastic Search'
+command :uninstall do |c|
+  c.action do
+    Uninstaller.new.call
+  end
+end
+
+desc 'Runs smoke test to ensure Elastic Search is running'
+command :test do |c|
+  c.action do
+    if InstallationSmokeTest.call
+      puts "ElasticSearch is running"
+    else
+      puts "WARNING: ElasticSearch is NOT running"
+    end
+  end
+end
+
+
 desc 'Installs Elastic Search'
 command :install do |c|
   c.desc 'Force install, blow away any current installation before install'
