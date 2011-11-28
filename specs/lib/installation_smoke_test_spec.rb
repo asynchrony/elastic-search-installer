@@ -6,18 +6,18 @@ describe InstallationSmokeTest do
   subject { InstallationSmokeTest }
 
   before do
-    Net::HTTP.stub(:get_print)
+    Net::HTTP.stub(:get)
   end
 
   it 'connects to the search service' do
-    Net::HTTP.should_receive(:get_print).with("localhost", "/", 9200)
+    Net::HTTP.should_receive(:get).with("localhost", "/", 9200)
 
     subject.call
   end
 
   context "when connection is successful" do
     before do
-      Net::HTTP.stub(:get_print => '{successful response json}')
+      Net::HTTP.stub(:get => '{successful response json}')
     end
 
     it 'returns true' do
@@ -27,7 +27,7 @@ describe InstallationSmokeTest do
 
   context "when connection is unsuccessful" do
     before do
-      Net::HTTP.stub(:get_print).and_raise(Errno::ECONNREFUSED)
+      Net::HTTP.stub(:get).and_raise(Errno::ECONNREFUSED)
     end
     
     it 'returns false' do
