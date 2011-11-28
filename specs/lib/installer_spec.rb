@@ -33,6 +33,11 @@ shared_examples_for 'a successful installation' do
     FileUtils.should_receive(:rm_r).with(Installer.tmp_path)
     subject.call
   end
+
+  it 'starts elastic search' do
+    Kernel.should_receive(:system).with("#{Installer.elastic_install_dir}/bin/elasticsearch")
+    subject.call
+  end
 end
 
 describe Installer do
