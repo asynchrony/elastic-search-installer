@@ -1,54 +1,51 @@
 require_relative('../../lib/installer')
 
+Uninstaller = Class.new unless Kernel.const_defined?('Uninstaller')
+
 shared_examples_for 'a successful installation' do
-  context "when the tmp directory does exist" do
+  context "when the tmp directory exists" do
     before do
-      File.stub(:directory?).with(tmp_path).and_return(true)
+      File.stub(:directory?).with(Installer.tmp_path).and_return(true)
     end
 
     it 'does not create the tmp directory' do
-      FileUtils.should_not_receive(:mkdir_p).with(tmp_path)
+      FileUtils.should_not_receive(:mkdir_p).with(Installer.tmp_path)
       subject.call
     end
   end
 
   it 'creates the tmp directory' do
-    FileUtils.should_receive(:mkdir_p).with(tmp_path)
+    FileUtils.should_receive(:mkdir_p).with(Installer.tmp_path)
     subject.call
   end
 
-  it 'unpacks the elastic archive into the tmp directory' do
-    Kernel.should_receive(:system).with("cd #{tmp_path}; tar xzf #{elastic_search_tar_path}")
+  it 'unpacks the elastic search archive into the tmp directory' do
+    Kernel.should_receive(:system).with("cd #{Installer.tmp_path}; tar xzf #{Installer.elastic_search_tar_path}")
     subject.call
   end
 
   it 'moves elastic search into the home directory' do
-    FileUtils.should_receive(:mv).with("#{tmp_path}/#{elastic_search_name}", elastic_install_path)
+    FileUtils.should_receive(:mv).with("#{Installer.tmp_path}/#{Installer.elastic_search_name}", Installer.elastic_install_path)
     subject.call
   end
 
   it 'removes the tmp directory' do
-    FileUtils.should_receive(:rm_r).with(tmp_path)
+    FileUtils.should_receive(:rm_r).with(Installer.tmp_path)
     subject.call
   end
 end
 
 describe Installer do
-  let(:elastic_search_name) { 'elasticsearch-0.18.4' }
-  let(:elastic_install_dir) { File.expand_path(File.join('~', elastic_search_name)) }
-  let(:elastic_install_path) { File.expand_path('~') }
-  let(:root_path) { File.expand_path(File.join(__FILE__, '..', '..', '..')) }
-  let(:elastic_search_tar_path) { File.join(root_path, 'vendor', "#{elastic_search_name}.tar.gz") }
-  let(:tmp_path) { File.join(root_path, 'tmp') }
+  let(:mock_uninstaller) { mock 'uninstaller', :call => nil }
 
   subject { Installer.new({:f => false, :force => false}) }
 
   before do
-    subject.stub(:`).with("which java").and_return('/usr/bin/java')
-    File.stub(:exists?).with(elastic_install_dir).and_return false
+    Uninstaller.stub(:elastic_search_installed? => false, :new => mock_uninstaller)
+    Installer.stub(:`).with("which java").and_return('/usr/bin/java')
     Kernel.stub(:system)
     FileUtils.stub(:mkdir_p => nil, :mv => nil, :rm_r => nil)
-    File.stub(:directory?).with(tmp_path).and_return(false)
+    File.stub(:directory?).with(Installer.tmp_path).and_return(false)
   end
 
   context "when valid" do
@@ -57,7 +54,7 @@ describe Installer do
 
   context "when java is not installed" do
     before do
-      subject.stub(:`).with("which java").and_return('      ')
+      Installer.stub(:`).with("which java").and_return('      ')
     end
 
     it 'adds an error message' do
@@ -72,7 +69,7 @@ describe Installer do
 
   context "when java is installed" do
     before do
-      subject.stub(:`).with("which java").and_return('/usr/bin/java')
+      Installer.stub(:`).with("which java").and_return('/usr/bin/java')
     end
 
     it 'does not add an error message' do
@@ -87,12 +84,12 @@ describe Installer do
 
   context "when elastic search seems to already be installed" do
     before do
-      File.stub(:exists?).with(elastic_install_dir).and_return true
+      Uninstaller.stub(:elastic_search_installed? => true)
     end
 
     it 'adds an error message' do
       subject.valid?
-      subject.error_messages.should == ["Elastic search seems to already be installed at #{elastic_install_dir}, please run the uninstall command before continuing."]
+      subject.error_messages.should == ["Elastic search seems to already be installed at #{Installer.elastic_install_dir}, please run the uninstall command before continuing."]
     end
 
     it 'is invalid' do
@@ -103,7 +100,7 @@ describe Installer do
       subject { Installer.new({:f => true, :force => true}) }
 
       it 'removes the current installation' do
-        FileUtils.should_receive(:rm_r).with(elastic_install_dir)
+        mock_uninstaller.should_receive(:call)
         subject.call
       end
 
@@ -117,7 +114,7 @@ describe Installer do
 
   context "when elastic search is not installed" do
     before do
-      File.stub(:exists?).with(elastic_install_dir).and_return false
+      Uninstaller.stub(:elastic_search_installed? => false)
     end
 
     it 'does not add an error message' do
@@ -128,28 +125,17 @@ describe Installer do
     it 'is valid' do
       subject.should be_valid
     end
-
-    context 'and force is supplied' do
-      subject { Installer.new({:f => true, :force => true}) }
-
-      it 'does not remove the current installation' do
-        FileUtils.should_not_receive(:rm_r).with(elastic_install_dir)
-        subject.call
-      end
-
-      it_behaves_like 'a successful installation'
-    end
   end
 
   context "when java is not installed and elastic search is already installed" do
     before do
-      subject.stub(:`).with("which java").and_return('     ')
-      File.stub(:exists?).with(elastic_install_dir).and_return true
+      Installer.stub(:`).with("which java").and_return('     ')
+      Uninstaller.stub(:elastic_search_installed? => true)
     end
 
     it 'adds both error messages' do
       subject.valid?
-      subject.error_messages.should =~ ["Java is not installed. You must have java installed to install Elastic Search.", "Elastic search seems to already be installed at #{elastic_install_dir}, please run the uninstall command before continuing."]
+      subject.error_messages.should =~ ["Java is not installed. You must have java installed to install Elastic Search.", "Elastic search seems to already be installed at #{Installer.elastic_install_dir}, please run the uninstall command before continuing."]
     end
 
     it 'is not valid' do
