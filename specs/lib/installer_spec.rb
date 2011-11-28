@@ -33,6 +33,11 @@ shared_examples_for 'a successful installation' do
     FileUtils.should_receive(:rm_r).with(Installer.tmp_path)
     subject.call
   end
+
+  it 'starts elastic search' do
+    Kernel.should_receive(:system).with("#{Installer.elastic_install_dir}/bin/elasticsearch")
+    subject.call
+  end
 end
 
 describe Installer do
@@ -89,7 +94,7 @@ describe Installer do
 
     it 'adds an error message' do
       subject.valid?
-      subject.error_messages.should == ["Elastic search seems to already be installed at #{Installer.elastic_install_dir}, please run the uninstall command before continuing."]
+      subject.error_messages.should == ["Elastic search seems to already be installed at #{Installer.elastic_install_dir}, please run with --force."]
     end
 
     it 'is invalid' do
@@ -135,7 +140,7 @@ describe Installer do
 
     it 'adds both error messages' do
       subject.valid?
-      subject.error_messages.should =~ ["Java is not installed. You must have java installed to install Elastic Search.", "Elastic search seems to already be installed at #{Installer.elastic_install_dir}, please run the uninstall command before continuing."]
+      subject.error_messages.should =~ ["Java is not installed. You must have java installed to install Elastic Search.", "Elastic search seems to already be installed at #{Installer.elastic_install_dir}, please run with --force."]
     end
 
     it 'is not valid' do

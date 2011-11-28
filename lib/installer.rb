@@ -37,7 +37,7 @@ class Installer
   def valid?
     error_messages << "Java is not installed. You must have java installed to install Elastic Search." unless Installer.java_installed?
     unless force_install? || !Uninstaller.elastic_search_installed?
-      error_messages << "Elastic search seems to already be installed at #{Installer.elastic_install_dir}, please run the uninstall command before continuing."
+      error_messages << "Elastic search seems to already be installed at #{Installer.elastic_install_dir}, please run with --force."
     end
     error_messages.empty?
   end
@@ -48,9 +48,14 @@ class Installer
     unpack_tar
     move_elastic_search_to_install_dir
     remove_temp_dir
+    start
   end
 
   private
+
+  def start
+    Kernel.system File.join(Installer.elastic_install_dir, 'bin', 'elasticsearch')
+  end
 
   def move_elastic_search_to_install_dir
     FileUtils.mv("#{Installer.tmp_path}/#{Installer.elastic_search_name}", Installer.elastic_install_path)

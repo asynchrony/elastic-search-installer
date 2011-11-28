@@ -1,9 +1,24 @@
+require 'installer'
+
 class Uninstaller
   def self.elastic_search_installed?
     File.exists?(Installer.elastic_install_dir)
   end
 
   def call
-    FileUtils.rm_r(Installer.elastic_install_dir) if Uninstaller.elastic_search_installed?
+    if Uninstaller.elastic_search_installed?
+      stop_current_processes
+      FileUtils.rm_r(Installer.elastic_install_dir)
+    end
+  end
+
+  def stop_current_processes
+    if running?
+      Kernel.system "kill -9 `ps aux | grep [e]lasticsearch-0.18.4 | awk '{print $2}'`"
+    end
+  end
+
+  def running?
+    Kernel.system('ps aux | grep [e]lasticsearch-0.18.4 > /dev/null') # sending to dev null so it does not output
   end
 end
