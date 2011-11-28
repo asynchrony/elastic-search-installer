@@ -37,7 +37,7 @@ command :install do |c|
     installer = Installer.new(options)
     if installer.valid?
       installer.call
-
+      sleep 10 # Wait for ElasticSearch to start up.
       if InstallationSmokeTest.call
         puts %Q(
 ****************************
