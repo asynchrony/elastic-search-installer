@@ -14,11 +14,11 @@ class Uninstaller
 
   def stop_current_processes
     if running?
-      Kernel.system "kill -9 `ps aux | grep [e]lasticsearch-0.18.4 | awk '{print $2}'`"
+      `kill -9 $(ps aux | grep [e]lasticsearch-0.18.4 | awk '{print $2}')`
     end
   end
 
   def running?
-    Kernel.system('ps aux | grep [e]lasticsearch-0.18.4 > /dev/null') # sending to dev null so it does not output
+    !`ps aux | grep [e]lasticsearch-0.18.4`.empty?
   end
 end
