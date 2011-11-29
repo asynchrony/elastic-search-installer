@@ -28,8 +28,14 @@ describe InstallationSmokeTest do
   context "when connection is unsuccessful" do
     before do
       Net::HTTP.stub(:get).and_raise(Errno::ECONNREFUSED)
+      subject.stub(:sleep)
     end
-    
+
+    it 'retries after 10 seconds' do
+      subject.should_receive(:sleep).with(10).once
+      subject.call
+    end
+
     it 'returns false' do
       subject.call.should be_false
     end
