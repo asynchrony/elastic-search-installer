@@ -20,12 +20,42 @@ Help
 `$ elastic_search_installer help`
 `$ elastic_search_installer help install`
 
-Push up script and install on server
-====================================
+Full process to Install
+=======================
 
-`scp -r elastic-search-installer user@host:.; ssh user@host 'elastic-search-installer/bin/elastic_search_installer install; rm -R elastic-search-installer'`
+Change to /tmp and clone the repo:
+``
+cd /tmp
+git clone https://github.com/asynchrony/elastic-search-installer.git
+cd elastic-search-installer
+``
 
-TODO
-====
+install:
+``
+bin/elastic_search_installer install my_cluster_name
+``
 
-* Make elastic search start on system boot
+Install the init script, so the service starts up on boot:
+
+``
+# AS ROOT
+cp /tmp/elastic-search-installer/scripts/elasticsearch-init-script.sh /etc/init.d/elasticsearch
+chmod +x /etc/init.d/elasticsearch
+chkconfig --add elasticsearch
+/etc/init.d/elasticsearch start
+/etc/init.d/elasticsearch status
+``
+
+run the smoke test:
+``
+# Back to normal user!
+bin/elastic_search_installer test
+``
+
+Make sure the output says that the smoke test passed.
+
+Clean up after ourselves:
+``
+cd ~
+rm -rf /tmp/elastic-search-installer
+``
