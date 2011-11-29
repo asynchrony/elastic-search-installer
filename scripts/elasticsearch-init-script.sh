@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 ### BEGIN INIT INFO
 # Provides:          elasticsearch
 # Required-Start:    $all
@@ -54,7 +54,7 @@ case "$1" in
     echo -n "Starting $DESC: "
     mkdir -p $LOG_DIR $DATA_DIR $WORK_DIR
     chown -R $USER:$USER $LOG_DIR $DATA_DIR $WORK_DIR
-    if type -p start-stop-daemon; then
+    if type -p start-stop-daemon > /dev/null; then
       start-stop-daemon --start --pidfile $PID_FILE --user $USER --startas $DAEMON -- $DAEMON_OPTS
     else
       runuser -s /bin/bash $USER -c "$DAEMON $DAEMON_OPTS"
@@ -72,7 +72,7 @@ case "$1" in
       echo "$DESC not running (no PID file)"
     else
       echo -n "Stopping $DESC: "
-      if type -p start-stop-daemon; then
+      if type -p start-stop-daemon > /dev/null; then
         start-stop-daemon --stop --pidfile $PID_FILE
       else
         kill $(cat $PID_FILE)
