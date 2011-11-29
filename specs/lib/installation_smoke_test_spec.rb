@@ -7,6 +7,7 @@ describe InstallationSmokeTest do
 
   before do
     Net::HTTP.stub(:get)
+    subject.stub(:puts)
   end
 
   it 'connects to the search service' do

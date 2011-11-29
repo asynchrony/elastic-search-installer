@@ -48,14 +48,9 @@ class Installer
     unpack_tar
     move_elastic_search_to_install_dir
     remove_temp_dir
-    start
   end
 
   private
-
-  def start
-    Kernel.system File.join(Installer.elastic_install_dir, 'bin', 'elasticsearch')
-  end
 
   def move_elastic_search_to_install_dir
     FileUtils.mv("#{Installer.tmp_path}/#{Installer.elastic_search_name}", Installer.elastic_install_path)
