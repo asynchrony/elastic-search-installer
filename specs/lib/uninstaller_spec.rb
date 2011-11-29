@@ -24,8 +24,8 @@ describe Uninstaller do
 
     context 'and is already running' do
       it 'stops all running elastic search processes' do
-        subject.should_receive(:`).with("ps aux | grep [e]lasticsearch-0.18.4").and_return 'elasticsearch-0.18.4'
-        subject.should_receive(:`).with("kill -9 $(ps aux | grep [e]lasticsearch-0.18.4 | awk '{print $2}')")
+        subject.should_receive(:`).with("ps aux | grep elasticsearch | grep java").and_return 'elasticsearch'
+        subject.should_receive(:`).with("kill -9 $(ps aux | grep elasticsearch | grep java | awk '{print $2}')")
 
         subject.call
       end
@@ -33,8 +33,8 @@ describe Uninstaller do
 
     context 'and is not running' do
       it 'does not attempt to stop any running elastic search processes' do
-        subject.should_receive(:`).with("ps aux | grep [e]lasticsearch-0.18.4").and_return ''
-        subject.should_not_receive(:`).with("kill -9 $(ps aux | grep [e]lasticsearch-0.18.4 | awk '{print $2}')")
+        subject.should_receive(:`).with("ps aux | grep elasticsearch | grep java").and_return ''
+        subject.should_not_receive(:`).with("kill -9 $(ps aux | grep elasticsearch | grep java | awk '{print $2}')")
 
         subject.call
       end

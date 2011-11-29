@@ -1,6 +1,7 @@
 require_relative('../../lib/installer')
 
 Uninstaller = Class.new unless Kernel.const_defined?('Uninstaller')
+ConfigFile = Class.new unless Kernel.const_defined?('ConfigFile')
 
 shared_examples_for 'a successful installation' do
   context "when the tmp directory exists" do
@@ -29,6 +30,12 @@ shared_examples_for 'a successful installation' do
     subject.call
   end
 
+  #it 'adds the cluster name setting to the elasticsearch config file' do
+  #  mock_config_file.should_receive(:append).with(subject.cluster_name)
+  #
+  #  File.open(local_filename, 'w') {|f| f.write(doc) }
+  #end
+
   it 'removes the tmp directory' do
     FileUtils.should_receive(:rm_r).with(Installer.tmp_path)
     subject.call
@@ -38,7 +45,7 @@ end
 describe Installer do
   let(:mock_uninstaller) { mock 'uninstaller', :call => nil }
 
-  subject { Installer.new({:f => false, :force => false}) }
+  subject { Installer.new({:f => false, :force => false, :cluster_name => 'elasticsearch', :c => 'elasticsearch'}) }
 
   before do
     Uninstaller.stub(:elastic_search_installed? => false, :new => mock_uninstaller)

@@ -52,6 +52,11 @@ command :install do |c|
   c.desc 'Force install, blow away any current installation before install'
   c.switch [:f, :force]
 
+
+  c.desc 'Set the cluster name used by Elastic Search'
+  c.default_value 'elasticsearch'
+  c.flag :c, :cluster_name
+
   c.action do |global_options,options,args|
     installer = Installer.new(options)
     if installer.valid?
