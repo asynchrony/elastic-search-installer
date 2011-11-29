@@ -21,6 +21,7 @@ require 'elastic_search_installer_version'
 require 'installer'
 require 'uninstaller'
 require 'installation_smoke_test'
+require 'config_file'
 
 include GLI
 
@@ -47,18 +48,18 @@ command :test do |c|
 end
 
 
-desc 'Installs Elastic Search'
+desc 'Installs Elastic Search in a cluster'
+arg_name 'cluster_name'
 command :install do |c|
   c.desc 'Force install, blow away any current installation before install'
   c.switch [:f, :force]
 
-
-  c.desc 'Set the cluster name used by Elastic Search'
-  c.default_value 'elasticsearch'
-  c.flag :c, :cluster_name
-
   c.action do |global_options,options,args|
-    installer = Installer.new(options)
+    if args.length < 1
+      raise "You must supply a cluster name to install in"
+    end
+    
+    installer = Installer.new(args[0], options)
     if installer.valid?
       installer.call
       puts %Q(

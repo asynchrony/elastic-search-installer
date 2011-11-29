@@ -1,4 +1,3 @@
-require 'ostruct'
 class Installer
   def self.elastic_install_dir
     File.expand_path(File.join(elastic_install_path, elastic_search_name))
@@ -32,11 +31,12 @@ class Installer
     File.join(root_path, 'tmp')
   end
 
-  attr_accessor :error_messages, :options
+  attr_accessor :error_messages, :options, :cluster_name
 
-  def initialize(options)
+  def initialize(cluster_name, options)
     self.error_messages = []
-    self.options = OpenStruct.new(options)
+    self.cluster_name = cluster_name
+    self.options = options
   end
 
   def valid?
@@ -53,6 +53,7 @@ class Installer
     unpack_tar
     move_elastic_search_to_install_dir
     remove_temp_dir
+    ConfigFile.add_cluster_name self.class.elastic_install_dir, cluster_name
   end
 
   private
@@ -62,11 +63,7 @@ class Installer
   end
 
   def force_install?
-    options.force
-  end
-
-  def cluster_name
-    options.cluster_name
+    options[:force]
   end
 
   def remove_temp_dir

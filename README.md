@@ -5,14 +5,14 @@ Installs Elastic Search as a service
 
 Install elastic search
 
-`$ elastic_search_installer install`
+`$ elastic_search_installer install my_cluster`
 
 Force Install
 =============
 
-Force install elastic search (first remove installation directory)
+Force install elastic search in my_cluster (first remove installation directory)
 
-`$ elastic_search_installer install --force`
+`$ elastic_search_installer install --force my_cluster`
 
 Help
 ====
