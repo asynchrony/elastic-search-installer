@@ -53,6 +53,7 @@ case "$1" in
   start)
     echo -n "Starting $DESC: "
     mkdir -p $LOG_DIR $DATA_DIR $WORK_DIR
+    chown -R $USER:$USER $LOG_DIR $DATA_DIR $WORK_DIR
     if type -p start-stop-daemon; then
       start-stop-daemon --start --pidfile $PID_FILE --user $USER --startas $DAEMON -- $DAEMON_OPTS
     else
