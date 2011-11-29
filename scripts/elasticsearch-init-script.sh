@@ -13,21 +13,16 @@
 ### BEGIN user-configurable settings
 NAME=elasticsearch
 DESC=elasticsearch
-if [ -d /usr/local/elasticsearch ]; then
+if [ -d /home/t1dfirst ]; then
   USER=t1dfirst
-  ES_HOME=/usr/local/elasticsearch
-  PID_FILE=/var/run/$NAME.pid
-  LOG_DIR=/var/log/$NAME
-  DATA_DIR=/var/lib/$NAME
-  CONFIG_FILE=/etc/$NAME/elasticsearch.yml
 else
   USER=capistrano
-  ES_HOME=/home/$USER/elasticsearch
-  PID_FILE=$ES_HOME/$NAME.pid
-  LOG_DIR=$ES_HOME/logs
-  DATA_DIR=$ES_HOME/data
-  CONFIG_FILE=$ES_HOME/config/elasticsearch.yml
 fi
+ES_HOME=/home/$USER/elasticsearch
+PID_FILE=$ES_HOME/$NAME.pid
+LOG_DIR=$ES_HOME/logs
+DATA_DIR=$ES_HOME/data
+CONFIG_FILE=$ES_HOME/config/elasticsearch.yml
 ES_MIN_MEM=256m
 ES_MAX_MEM=2g
 WORK_DIR=/tmp/$NAME
