@@ -14,11 +14,11 @@ class Uninstaller
 
   def stop_current_processes
     if running?
-      `kill -9 $(ps aux | grep [e]lasticsearch-0.18.4 | awk '{print $2}')`
+      `kill -9 $(ps aux | grep elasticsearch | grep java | awk '{print $2}')`
     end
   end
 
   def running?
-    !`ps aux | grep [e]lasticsearch-0.18.4`.empty?
+    !`ps aux | grep elasticsearch | grep java`.empty?
   end
 end

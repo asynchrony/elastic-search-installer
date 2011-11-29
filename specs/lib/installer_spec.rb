@@ -25,7 +25,7 @@ shared_examples_for 'a successful installation' do
   end
 
   it 'moves elastic search into the home directory' do
-    FileUtils.should_receive(:mv).with("#{Installer.tmp_path}/#{Installer.elastic_search_name}", Installer.elastic_install_path)
+    FileUtils.should_receive(:mv).with("#{Installer.tmp_path}/#{Installer.elastic_search_name}-#{Installer.elastic_search_version}", Installer.elastic_install_dir)
     subject.call
   end
 

@@ -4,7 +4,11 @@ class Installer
   end
 
   def self.elastic_search_name
-    'elasticsearch-0.18.4'
+    'elasticsearch'
+  end
+
+  def self.elastic_search_version
+    '0.18.4'
   end
 
   def self.java_installed?
@@ -20,7 +24,7 @@ class Installer
   end
 
   def self.elastic_search_tar_path
-    File.join(root_path, 'vendor', "#{elastic_search_name}.tar.gz")
+    File.join(root_path, 'vendor', "#{elastic_search_name}-#{elastic_search_version}.tar.gz")
   end
 
   def self.tmp_path
@@ -53,7 +57,7 @@ class Installer
   private
 
   def move_elastic_search_to_install_dir
-    FileUtils.mv("#{Installer.tmp_path}/#{Installer.elastic_search_name}", Installer.elastic_install_path)
+    FileUtils.mv("#{Installer.tmp_path}/#{Installer.elastic_search_name}-#{Installer.elastic_search_version}", Installer.elastic_install_dir)
   end
 
   def force_install?

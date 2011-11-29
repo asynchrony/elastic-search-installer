@@ -56,7 +56,6 @@ command :install do |c|
     installer = Installer.new(options)
     if installer.valid?
       installer.call
-      #`reset` # Something below seems to be messing up the terminal; this works around that.
       puts %Q(
 ****************************
       I kan haz surch!
