@@ -14,6 +14,7 @@
 NAME=elasticsearch
 DESC=elasticsearch
 USER=elasticsearch
+JAVA_HOME=/usr/local/java
 ES_HOME=/home/$USER/elasticsearch
 PID_FILE=$ES_HOME/$NAME.pid
 LOG_DIR=$ES_HOME/logs
