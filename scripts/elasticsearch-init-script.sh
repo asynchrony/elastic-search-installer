@@ -13,11 +13,7 @@
 ### BEGIN user-configurable settings
 NAME=elasticsearch
 DESC=elasticsearch
-if [ -d /home/t1dfirst ]; then
-  USER=t1dfirst
-else
-  USER=capistrano
-fi
+USER=elasticsearch
 ES_HOME=/home/$USER/elasticsearch
 PID_FILE=$ES_HOME/$NAME.pid
 LOG_DIR=$ES_HOME/logs
