@@ -9,12 +9,13 @@
 # Description:       Starts elasticsearch using start-stop-daemon
 ### END INIT INFO
 
+# You may need to change these
+USER=elasticsearch          # the user you used to run the elastic search install command
+JAVA_HOME=/usr/local/java   # Where java lives
 
 ### BEGIN user-configurable settings
 NAME=elasticsearch
 DESC=elasticsearch
-USER=elasticsearch
-JAVA_HOME=/usr/local/java
 ES_HOME=/home/$USER/elasticsearch
 PID_FILE=$ES_HOME/$NAME.pid
 LOG_DIR=$ES_HOME/logs
