@@ -45,9 +45,11 @@ Install the init script, so the service starts up on boot:
     chmod +x /etc/init.d/elasticsearch
 
 If running GENTOO:
+
     rc-update add elasticsearch default
 
 Otherwise:
+
     chkconfig --add elasticsearch
 
 ### Start Elastic Search
