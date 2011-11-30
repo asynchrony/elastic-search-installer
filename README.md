@@ -38,7 +38,7 @@ Change to /tmp and clone the repo:
 
 ### Install the init script
 
-Install the init script, so the service starts up on boot:
+Install the init script, so the service starts up on boot (you may need to change the USER variable in the init script to be the user you used to install elastic search):
 
     # AS ROOT
     cp /tmp/elastic-search-installer/scripts/elasticsearch-init-script.sh /etc/init.d/elasticsearch
