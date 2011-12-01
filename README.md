@@ -46,16 +46,24 @@ Install the init script, so the service starts up on boot:
     
 double check the variables at the top of the init script.  You may need to update some of them.
 
+If running Debian or Ubuntu:
+
+    # AS ROOT
+    update-rc.d elasticsearch defaults
+
 If running GENTOO:
 
+    # AS ROOT
     rc-update add elasticsearch default
 
 Otherwise:
 
+    # AS ROOT
     chkconfig --add elasticsearch
 
 ### Start Elastic Search
 
+    # AS ROOT
     /etc/init.d/elasticsearch start
     /etc/init.d/elasticsearch status
 
