@@ -48,7 +48,7 @@ case "$1" in
     mkdir -p $LOG_DIR $DATA_DIR $WORK_DIR
     chown -R $USER:$USER $LOG_DIR $DATA_DIR $WORK_DIR
     if type -p start-stop-daemon > /dev/null; then
-      start-stop-daemon --start --pidfile $PID_FILE --user $USER --startas $DAEMON -- $DAEMON_OPTS
+      start-stop-daemon --start --pidfile $PID_FILE --user $USER --chuid $USER --startas $DAEMON -- $DAEMON_OPTS
     else
       runuser -s /bin/bash $USER -c "$DAEMON $DAEMON_OPTS"
       #daemon --pidfile $PID_FILE --user $USER $DAEMON $DAEMON_OPTS
