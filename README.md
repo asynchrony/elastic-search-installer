@@ -32,7 +32,7 @@ Change to /tmp and clone the repo:
     git clone https://github.com/asynchrony/elastic-search-installer.git
     cd elastic-search-installer
 
-### Install elastic search and configure
+### Install elastic search and configure, change 'my_cluster_name' to be the elastic search cluster name of your choice
 
     bin/elastic_search_installer install my_cluster_name
 
